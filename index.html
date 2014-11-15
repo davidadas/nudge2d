@@ -1,13 +1,65 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!--Importing from submodule solely to demonstrate advanced Git concepts-->
-    <script type="text/javascript" src="./EaselJS/lib/easeljs-NEXT.combined.js"></script>
-    <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
+    <head>
+        <!--Importing from submodule solely to demonstrate advanced Git concepts-->
+        <script type="text/javascript" src="./EaselJS/lib/easeljs-NEXT.combined.js"></script>
+        <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
 
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-  <canvas id="gameView"></canvas>
-</body>
+        <link href="css/styles.css" rel="stylesheet" type="text/css">
+
+        <script>
+
+            var canvas, stage;     // References to drawable container.
+            var stageH = 640;
+            var stageW = 480;
+            var keepAspectRatio = true;
+            window.onresize = scaleCanvas;
+
+            var loader;
+
+            function initGame(){
+                canvas = document.getElementById("gameView");
+                stage = new createjs.Stage(canvas);
+                scaleCanvas();
+
+                createjs.Ticker.addEventListener("tick", tickStage);
+            }
+
+            function tickStage(event){
+                // Update the view.
+                stage.update(event);
+            }
+
+            function scaleCanvas() {
+                // the following borrowed from: http://bit.ly/11b5Pij
+                var w = window.innerWidth;
+                var h = window.innerHeight;
+
+                if (keepAspectRatio) {
+                    // keep aspect ratio
+                    var scale = Math.min(w / stageW, h / stageH);
+                    stage.scaleX = scale;
+                    stage.scaleY = scale;
+
+                    // adjust canvas size
+                    stage.canvas.width = stageW * scale;
+                    stage.canvas.height = stageH * scale;
+                } else {
+                    // scale to exact fit
+                    stage.scaleX = w / stageH;
+                    stage.scaleY = h / stageH;
+
+                    // adjust canvas size
+                    stage.canvas.width = stageH * stage.scaleX;
+                    stage.canvas.height = stageH * stage.scaleY;
+                }
+
+                // update the stage
+                stage.update()
+            }
+        </script>
+    </head>
+    <body onLoad="initGame();">
+        <canvas id="gameView"></canvas>
+    </body>
 </html>
