@@ -29,33 +29,9 @@
 ],
 "animations": {
     
-        "dead (1)":[0], 
-        "dead (2)":[1], 
-        "dead (3)":[2], 
-        "dead (4)":[3], 
-        "dead (5)":[4], 
-        "idle (1)":[5], 
-        "idle (2)":[6], 
-        "idle (3)":[7], 
-        "idle (4)":[8], 
-        "idle (5)":[9], 
-        "idle (6)":[10], 
-        "shoot (1)":[11], 
-        "shoot (2)":[12], 
-        "shoot (3)":[13], 
-        "shoot (4)":[14], 
-        "walk (1)":[15], 
-        "walk (2)":[16], 
-        "walk (3)":[17], 
-        "walk (4)":[18], 
-        "walk (5)":[19], 
-        "walk (6)":[20], 
-        "walk (7)":[21], 
-        "walk (8)":[22], 
-        "walk (9)":[23]
-},
-"texturepacker": [
-        "SmartUpdateHash: $TexturePacker:SmartUpdate:831d1e4bfb44504f8103e64c5342a830:2ac18bee33d2e1aafc220b307fc0fefc:438747c1aa0819a0f01b1ebe321e797c$",
-        "Created with TexturePacker (http://www.texturepacker.com) for EaselJS"
-]
+        "dead":[0, 4],
+        "idle":[5, 10],
+        "shoot":[11, 14],
+        "walk":[15, 23]
+}
 }
