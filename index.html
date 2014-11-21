@@ -5,6 +5,7 @@
         <script type="text/javascript" src="./EaselJS/lib/easeljs-NEXT.combined.js"></script>
         <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
 
+        <script type="text/javascript" src="./src/SpriteFactory.js"></script>
         <link href="css/styles.css" rel="stylesheet" type="text/css">
 
         <script>
@@ -13,24 +14,29 @@
             var stageH = 640;
             var stageW = 480;
             var keepAspectRatio = true;
-            window.onresize = scaleCanvas;
 
+            var spriteBuilder;
             var loader;
+            window.onresize = scaleCanvas;
 
             function initGame(){
                 canvas = document.getElementById("gameView");
                 stage = new createjs.Stage(canvas);
                 scaleCanvas();
                 // load game resources into the manifest.
-                manifest = [
+                var manifest = [
                     {src:"images/units/grunt.png",  id:"grunt"},
                     {src:"images/units/titan.png",  id:"titan"},
                     {src:"images/units/walker.png", id:"walker"}
                 ];
 
                 loader = new createjs.LoadQueue(false);
-                loader.loadManifest(manifest);
+                loader.addEventListener("complete", function(){
+                    spriteBuilder = new SpriteFactory(loader);
+                });
                 createjs.Ticker.addEventListener("tick", tickStage);
+                loader.loadManifest(manifest);
+
             }
 
             function tickStage(event){
