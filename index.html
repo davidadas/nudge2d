@@ -14,6 +14,7 @@
             var stageH = 640;
             var stageW = 480;
             var keepAspectRatio = true;
+            var scaleStage = false;
 
             var spriteBuilder;
             var loader;
@@ -27,7 +28,8 @@
                 var manifest = [
                     {src:"images/units/grunt.png",  id:"grunt"},
                     {src:"images/units/titan.png",  id:"titan"},
-                    {src:"images/units/walker.png", id:"walker"}
+                    {src:"images/units/walker.png", id:"walker"},
+                    {src:"images/units/champ.png",  id:"champ"}
                 ];
 
                 loader = new createjs.LoadQueue(false);
@@ -49,7 +51,7 @@
                 var w = window.innerWidth;
                 var h = window.innerHeight;
 
-                if (keepAspectRatio) {
+                if (scaleStage && keepAspectRatio) {
                     // keep aspect ratio
                     var scale = Math.min(w / stageW, h / stageH);
                     stage.scaleX = scale;
@@ -58,7 +60,7 @@
                     // adjust canvas size
                     stage.canvas.width = stageW * scale;
                     stage.canvas.height = stageH * scale;
-                } else {
+                } else if (scaleStage){
                     // scale to exact fit
                     stage.scaleX = w / stageH;
                     stage.scaleY = h / stageH;
