@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!--Importing from submodule solely to demonstrate advanced Git concepts-->
-        <script type="text/javascript" src="./EaselJS/lib/easeljs-NEXT.combined.js"></script>
+        <script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
         <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
 
         <script type="text/javascript" src="./src/SpriteFactory.js"></script>
@@ -38,7 +37,6 @@
                 });
                 createjs.Ticker.addEventListener("tick", tickStage);
                 loader.loadManifest(manifest);
-
             }
 
             function tickStage(event){
