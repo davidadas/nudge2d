@@ -15,8 +15,21 @@
             var keepAspectRatio = true;
             var scaleStage = false;
 
+            var keyBindings = {
+                MOVE_LEFT:    37,
+                MOVE_RIGHT:   39,
+                SHOOT:        32
+            };
+            var activeKey = "idle";
+            var moveRight = false;
+            var champion;
+
             var spriteBuilder;
             var loader;
+
+            // map window and document events.
+            document.onkeydown = stageKeyDown;
+            document.onkeyup = stageKeyUp;
             window.onresize = scaleCanvas;
 
             function initGame(){
@@ -32,16 +45,39 @@
                 ];
 
                 loader = new createjs.LoadQueue(false);
-                loader.addEventListener("complete", function(){
-                    spriteBuilder = new SpriteFactory(loader);
-                });
-                createjs.Ticker.addEventListener("tick", tickStage);
+                loader.addEventListener("complete", initStage);
                 loader.loadManifest(manifest);
             }
 
+            function initStage(){
+                spriteBuilder = new SpriteFactory(loader);
+                champion = spriteBuilder.getSprite("champ");
+                stage.addChild(champion);
+
+                createjs.Ticker.addEventListener("tick", tickStage);
+                createjs.Ticker.setFPS(40);
+            }
+
             function tickStage(event){
+                // only update if animation has changed
+                if(champion.currentAnimation != activeKey){
+                    champion.gotoAndPlay(activeKey);
+                }
                 // update the view.
                 stage.update(event);
+            }
+
+
+            function stageKeyDown(event){
+                switch(event.keyCode) {
+                    case keyBindings.MOVE_RIGHT: activeKey = "run"; break;
+                    case keyBindings.SHOOT: activeKey = "shoot"; break;
+                }
+            }
+
+            function stageKeyUp(event){
+                // release the current animation
+                activeKey = "idle";
             }
 
             function scaleCanvas() {
