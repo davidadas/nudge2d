@@ -3,7 +3,7 @@ function SpriteFactory(loader) {
     this.sprites = {
       grunt: {
         "images": [loader.getResult("grunt")],
-        frames: {width: 126, height: 118},
+        "frames": {width: 126, height: 118},
         "animations": {
           "dead":  [0,   4],
           "idle":  [5,  10],
@@ -13,7 +13,7 @@ function SpriteFactory(loader) {
       },
       titan: {
         "images": [loader.getResult("titan")],
-        frames: {width: 227, height: 158},
+        "frames": {width: 227, height: 158},
         "animations": {
           "dead":  [0,   4],
           "idle":  [5,  10],
@@ -24,7 +24,7 @@ function SpriteFactory(loader) {
       },
       walker: {
         "images": [loader.getResult("walker")],
-        frames: {width: 166, height: 121},
+        "frames": {width: 166, height: 121},
         "animations": {
           "dead":  [0,   4],
           "idle":  [5,  10],
@@ -34,7 +34,7 @@ function SpriteFactory(loader) {
       },
       champ: {
         "images": [loader.getResult("champ")],
-        frames: {width: 137, height: 137},
+        "frames": {width: 137, height: 137},
         "animations": {
           "attack":         [0,   6],
           "attack_crouch":  [7,  13],
