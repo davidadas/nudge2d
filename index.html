@@ -39,10 +39,14 @@
                 scaleCanvas();
                 // load game resources into the manifest.
                 var manifest = [
+                    // units
                     {src:"images/units/grunt.png",  id:"grunt"},
                     {src:"images/units/titan.png",  id:"titan"},
                     {src:"images/units/walker.png", id:"walker"},
-                    {src:"images/units/champ.png",  id:"champ"}
+                    {src:"images/units/champ.png",  id:"champ"},
+                    // effects
+                    {src:"images/fx/explosions.png",id:"explosions"},
+                    {src:"images/fx/bullets.png",   id:"bullets"}
                 ];
 
                 loader = new createjs.LoadQueue(false);
@@ -52,7 +56,7 @@
 
             function initStage(){
                 spriteBuilder = new SpriteFactory(loader);
-                champion = spriteBuilder.getSprite("champ");
+                champion = spriteBuilder.unit("champ");
                 stage.addChild(champion);
 
                 createjs.Ticker.addEventListener("tick", tickStage);
@@ -68,12 +72,11 @@
                 stage.update(event);
             }
 
-
             function stageKeyDown(event){
                 switch(event.keyCode) {
                     case keyBindings.MOVE_RIGHT: activeKey = "run"; break;
-                    case keyBindings.MOVE_DOWN: activeKey = "crouch"; break;
-                    case keyBindings.SHOOT: activeKey = "shoot"; break;
+                    case keyBindings.MOVE_DOWN:  activeKey = "crouch"; break;
+                    case keyBindings.SHOOT:      activeKey = "shoot"; break;
                 }
             }
 
