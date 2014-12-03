@@ -44,7 +44,7 @@
                     {src:"images/units/titan.png",  id:"titan"},
                     {src:"images/units/walker.png", id:"walker"},
                     {src:"images/units/champ.png",  id:"champ"},
-                    // effects
+                    // fx
                     {src:"images/fx/explosions.png",id:"explosions"},
                     {src:"images/fx/bullets.png",   id:"bullets"}
                 ];
@@ -60,10 +60,11 @@
                 stage.addChild(champion);
 
                 createjs.Ticker.addEventListener("tick", tickStage);
-                createjs.Ticker.setFPS(40);
+                createjs.Ticker.setFPS(30);
             }
 
             function tickStage(event){
+                stageKeyUpldate();
                 // only update if animation has changed
                 if(champion.currentAnimation != activeKey){
                     champion.gotoAndPlay(activeKey);
@@ -83,6 +84,10 @@
             function stageKeyUp(event){
                 // release the current animation
                 activeKey = "idle";
+            }
+
+            function stageKeyUpldate(){
+
             }
 
             function scaleCanvas() {

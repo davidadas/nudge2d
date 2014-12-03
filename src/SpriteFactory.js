@@ -56,7 +56,15 @@ function SpriteFactory(loader) {
         "walk":           [97, 111]
       }
     },
-    bullets: {
+    explosion: {
+      "images": [loader.getResult("explosions")],
+      "frames": {width: 262, height: 172},
+      "animations": {
+        "explo":[0, 10],
+        "explo_ground":[11, 21]
+      }
+    },
+    bullet: {
       "images": [loader.getResult("bullets")],
       "frames": [
         [2, 2, 63, 74],
@@ -108,13 +116,12 @@ function SpriteFactory(loader) {
     return new createjs.Sprite(spritesheet, action);
   }
 
-  this.unit = function(enemy){
+  SpriteFactory.prototype.unit = function(enemy){
     return _loadSprite(enemy, "idle")
   };
 
-  this.bullet = function(effect){
-    return _loadSprite("bullets", effect)
-  }
-
+  SpriteFactory.prototype.fx = function(fxType, effect){
+    return _loadSprite(fxType, effect)
+  };
 
 }
