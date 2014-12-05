@@ -1,121 +1,120 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
-        <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
-        <script src="https://rawgithub.com/dmauro/Keypress/master/keypress.js"></script>
+  <head>
+    <script type="text/javascript" src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+    <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.4.1.min.js"></script>
+    <script src="https://rawgithub.com/dmauro/Keypress/master/keypress.js"></script>
 
-        <script type="text/javascript" src="./src/SpriteFactory.js"></script>
-        <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./src/SpriteFactory.js"></script>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
 
-        <script>
+    <script>
 
-            var canvas, stage;   // References to drawable container.
-            var stageH = 640;
-            var stageW = 480;
-            var keepAspectRatio = true;
-            var scaleStage = false;
+      var canvas, stage;   // References to drawable container.
+      var stageH = 640;
+      var stageW = 480;
+      var keepAspectRatio = true;
+      var scaleStage = false;
 
-            var keyBindings = {
-                MOVE_LEFT:    37,
-                MOVE_RIGHT:   39,
-                MOVE_DOWN:    40,
-                SHOOT:        32
-            };
-            var activeKey = "idle";
-            var moveRight = false;
-            var champion;
+      var keyBindings = {
+        MOVE_LEFT:  37,
+        MOVE_RIGHT:   39,
+        MOVE_DOWN:  40,
+        SHOOT:    32
+      };
+      var activeKey = "idle";
+      var champion;
 
-            var spriteBuilder;
-            var loader;
+      var spriteBuilder;
+      var loader;
 
-            // map window and document events.
-            document.onkeydown = stageKeyDown;
-            document.onkeyup = stageKeyUp;
-            window.onresize = scaleCanvas;
+      // map window and document events.
+      document.onkeydown = stageKeyDown;
+      document.onkeyup = stageKeyUp;
+      window.onresize = scaleCanvas;
 
-            function initGame(){
-                canvas = document.getElementById("gameView");
-                stage = new createjs.Stage(canvas);
-                scaleCanvas();
-                // load game resources into the manifest.
-                var manifest = [
-                    // units
-                    {src:"images/units/grunt.png",  id:"grunt"},
-                    {src:"images/units/titan.png",  id:"titan"},
-                    {src:"images/units/walker.png", id:"walker"},
-                    {src:"images/units/champ.png",  id:"champ"},
-                    // fx
-                    {src:"images/fx/explosions.png",id:"explosions"},
-                    {src:"images/fx/bullets.png",   id:"bullets"}
-                ];
+      function initGame(){
+        canvas = document.getElementById("gameView");
+        stage = new createjs.Stage(canvas);
+        scaleCanvas();
+        // load game resources into the manifest.
+        var manifest = [
+          // units
+          {src:"images/units/grunt.png",  id:"grunt"},
+          {src:"images/units/titan.png",  id:"titan"},
+          {src:"images/units/walker.png", id:"walker"},
+          {src:"images/units/champ.png",  id:"champ"},
+          // fx
+          {src:"images/fx/explosions.png",id:"explosions"},
+          {src:"images/fx/bullets.png",   id:"bullets"}
+        ];
 
-                loader = new createjs.LoadQueue(false);
-                loader.addEventListener("complete", initStage);
-                loader.loadManifest(manifest);
-            }
+        loader = new createjs.LoadQueue(false);
+        loader.addEventListener("complete", initStage);
+        loader.loadManifest(manifest);
+      }
 
-            function initStage(){
-                spriteBuilder = new SpriteFactory(loader);
-                champion = spriteBuilder.unit("champ");
-                stage.addChild(champion);
+      function initStage(){
+        spriteBuilder = new SpriteFactory(loader);
+        champion = spriteBuilder.unit("champ");
+        stage.addChild(champion);
 
-                createjs.Ticker.addEventListener("tick", tickStage);
-                createjs.Ticker.setFPS(30);
-            }
+        createjs.Ticker.addEventListener("tick", tickStage);
+        createjs.Ticker.setFPS(30);
+      }
 
-            function tickStage(event){
-                // only update if animation has changed
-                if(champion.currentAnimation != activeKey){
-                    champion.gotoAndPlay(activeKey);
-                }
-                // update the view.
-                stage.update(event);
-            }
+      function tickStage(event){
+        // only update if animation has changed
+        if(champion.currentAnimation != activeKey){
+          champion.gotoAndPlay(activeKey);
+        }
+        // update the view.
+        stage.update(event);
+      }
 
-            function stageKeyDown(event){
-                switch(event.keyCode) {
-                    case keyBindings.MOVE_RIGHT: activeKey = "run"; break;
-                    case keyBindings.MOVE_DOWN:  activeKey = "crouch"; break;
-                    case keyBindings.SHOOT:      activeKey = "shoot"; break;
-                }
-            }
+      function stageKeyDown(event){
+        switch(event.keyCode) {
+          case keyBindings.MOVE_RIGHT: activeKey = "run"; break;
+          case keyBindings.MOVE_DOWN:  activeKey = "crouch"; break;
+          case keyBindings.SHOOT:      activeKey = "shoot"; break;
+        }
+      }
 
-            function stageKeyUp(event){
-                // release the current animation
-                activeKey = "idle";
-            }
+      function stageKeyUp(event){
+        // release the current animation
+        activeKey = "idle";
+      }
 
-            function scaleCanvas() {
-                // the following borrowed from: http://bit.ly/11b5Pij
-                var w = window.innerWidth;
-                var h = window.innerHeight;
+      function scaleCanvas() {
+        // the following borrowed from: http://bit.ly/11b5Pij
+        var w = window.innerWidth;
+        var h = window.innerHeight;
 
-                if (scaleStage && keepAspectRatio) {
-                    // keep aspect ratio
-                    var scale = Math.min(w / stageW, h / stageH);
-                    stage.scaleX = scale;
-                    stage.scaleY = scale;
+        if (scaleStage && keepAspectRatio) {
+          // keep aspect ratio
+          var scale = Math.min(w / stageW, h / stageH);
+          stage.scaleX = scale;
+          stage.scaleY = scale;
 
-                    // adjust canvas size
-                    stage.canvas.width = stageW * scale;
-                    stage.canvas.height = stageH * scale;
-                } else if (scaleStage){
-                    // scale to exact fit
-                    stage.scaleX = w / stageH;
-                    stage.scaleY = h / stageH;
+          // adjust canvas size
+          stage.canvas.width = stageW * scale;
+          stage.canvas.height = stageH * scale;
+        } else if (scaleStage){
+          // scale to exact fit
+          stage.scaleX = w / stageH;
+          stage.scaleY = h / stageH;
 
-                    // adjust canvas size
-                    stage.canvas.width = stageH * stage.scaleX;
-                    stage.canvas.height = stageH * stage.scaleY;
-                }
+          // adjust canvas size
+          stage.canvas.width = stageH * stage.scaleX;
+          stage.canvas.height = stageH * stage.scaleY;
+        }
 
-                // update the stage
-                stage.update()
-            }
-        </script>
-    </head>
-    <body onLoad="initGame();">
-        <canvas id="gameView"></canvas>
-    </body>
+        // update the stage
+        stage.update()
+      }
+    </script>
+  </head>
+  <body onLoad="initGame();">
+    <canvas id="gameView"></canvas>
+  </body>
 </html>
