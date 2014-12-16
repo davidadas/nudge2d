@@ -25,7 +25,7 @@
         MOVE_DOWN:  40,
         SHOOT:      32
       };
-      var champion, enemy;
+      var champion;
 
       var loader;
 
@@ -68,9 +68,6 @@
         });
 
         champion = new nudge2d.Champion();
-        enemy = new nudge2d.Enemy("grunt");
-        enemy.x = 500;
-        nudge2d.Scene.addNode(enemy);
         nudge2d.Scene.addNode(champion);
 
         createjs.Ticker.addEventListener('tick', tickStage);
