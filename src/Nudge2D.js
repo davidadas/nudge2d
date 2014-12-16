@@ -3,33 +3,21 @@ this.nudge2d = this.nudge2d || {};  // Initialize namespace
 // TODO: This class is a placeholder; not suited for permanent use.
 // Said effort will occur once a deeper understanding of Easeljs is aquired.
 (function (window) {
-  // Initialize the AssetManager and Scene array.
-  // TODO: As mentioned above, please destroy the following.
-  nudge2d.initialize = function(options){
-    nudge2d.AssetManifest = _loadAssets(options.manifest);
-    nudge2d.Scene = {
-      nodes: new Array(),
-      nodeAdded:   options.nodeAdded   || function(){},
-      nodeRemoved: options.nodeRemoved || function(){},
-      // Methods:
-      addNode: function(node){
-        this.nodes.push(node);
-        this.nodeAdded(node);
-      },
-      removeNode: function(node){
-        this.nodes.pop(node);
-        this.nodeRemoved(node);
-      }
-    };
-  };
+  /**
+   * Initialize the container of game assets
+   * @param options the manifest and config options
+   * @constructor
+   */
+  function AssetManager(options){
+    this.options = options;
+    nudge2d.AssetManifest = loadAssets(options.manifest);
+    nudge2d.Scene = initScene(options);
+  }
 
   /**
-   * Initializes game assets (e.g. animation, audio, etc).
-   * @param {LoadQueue} loader the preloaded resource manifest.
-   * @returns the full list of animation, audio, etc.
    * @TODO: Replace with runtime loading / lazy initialization.
    */
-  function _loadAssets(loader){
+  function loadAssets(loader){
     return {
       grunt: {
         "images": [loader.getResult("grunt")],
@@ -138,5 +126,28 @@ this.nudge2d = this.nudge2d || {};  // Initialize namespace
         }
       }
     }
+  };
+
+  function initScene(options){
+    return {
+      nodes: new Array(),
+      nodeAdded:   options.nodeAdded   || function(){},
+      nodeRemoved: options.nodeRemoved || function(){},
+      // Methods:
+      addNode: function(node){
+        this.nodes.push(node);
+        this.nodeAdded(node);
+      },
+      removeNode: function(node){
+        this.nodes.pop(node);
+        this.nodeRemoved(node);
+      }
+    };
   }
+
+  nudge2d.initialize = function(options){
+    nudge2d.AssetManager = new AssetManager(options);
+  };
+
+
 }(window));

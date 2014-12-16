@@ -2,9 +2,7 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
 
 (function (window) {
   /**
-   * @param sprite the Champion animation
-   * @param vX velocity along the x-axis
-   * @param vY velocity along the y-axis
+   *
    * @constructor
    */
   function Champion() {
@@ -28,13 +26,13 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
    * Changes the current animation of the unit
    * @param {String} state the new animation
    */
-  Champion.prototype.setState = function(state){
+  Champion.prototype.setAnimation = function(state){
     this.activeState = state;
   };
 
   // Fires unit's primary weapon.
   Champion.prototype.firePrimary = function(){
-    this.setState("shoot");
+    this.setAnimation("shoot");
     var bullet = new nudge2d.Projectile(this.primWeapon, 30, 0);
     bullet.x = this.x+30;
     bullet.y = this.y+35;
@@ -50,8 +48,8 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
     if(this.activeState != this.currentAnimation){
       this.gotoAndPlay(this.activeState);
     }
-  };
 
+  };
 
   nudge2d.Champion = Champion;
 }(window));
