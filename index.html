@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type='text/javascript' src='http://code.createjs.com/createjs-2013.12.12.min.js'></script>
-    <script type='text/javascript' src='http://code.createjs.com/preloadjs-0.4.1.min.js'></script>
-    <script src='https://rawgithub.com/dmauro/Keypress/master/keypress.js'></script>
+    <script src='http://code.createjs.com/createjs-2013.12.12.min.js'></script>
+    <script src='http://code.createjs.com/preloadjs-0.4.1.min.js'></script>
+    <script src='https://rawgit.com/olsn/Collision-Detection-for-EaselJS/master/src/ndgmr.Collision.js'></script>
 
-    <script type='text/javascript' src='./src/SpriteFactory.js'></script>
+    <script type='text/javascript' src='src/nudge2d.js'></script>
+    <script type='text/javascript' src='src/projectile.js'></script>
+    <script type='text/javascript' src='src/champion.js'></script>
+    <script type='text/javascript' src='src/enemy.js'></script>
     <link href='css/styles.css' rel='stylesheet' type='text/css'>
 
     <script>
@@ -22,15 +25,10 @@
         MOVE_DOWN:  40,
         SHOOT:      32
       };
-      var activeKey = 'idle';
+      var loader;
       var champion;
 
-      var spriteBuilder;
-      var loader;
-
-      var projectiles = [];
-
-      // map window and document events.
+      // Map window and document events.
       document.onkeydown = stageKeyDown;
       document.onkeyup = stageKeyUp;
       window.onresize = scaleCanvas;
@@ -40,7 +38,7 @@
         canvas.setAttribute('height', stageH);
         canvas.setAttribute('width',  stageW);
 
-        // load game resources into the manifest.
+        // Load game resources into the manifest.
         var manifest = [
           // units
           {src:'images/units/grunt.png',  id:'grunt'},
@@ -48,8 +46,8 @@
           {src:'images/units/walker.png', id:'walker'},
           {src:'images/units/champ.png',  id:'champ'},
           // fx
-          {src:'images/fx/explosions.png',id:'explosions'},
-          {src:'images/fx/bullets.png',   id:'bullets'}
+          {src:'images/fx/explosions.png', id:'explosions'},
+          {src:'images/fx/projectiles.png',id:'projectiles'}
         ];
 
         loader = new createjs.LoadQueue(false);
@@ -59,9 +57,17 @@
 
       function initStage(){
         stage = new createjs.Stage(canvas);
-        spriteBuilder = new SpriteFactory(loader);
-        champion = spriteBuilder.unit('champ');
-        stage.addChild(champion);
+        stage.setBounds(stageW, stageH); // Expose stage boundary
+
+        // Load game assets and set stage.
+        nudge2d.initialize({
+          manifest:    loader,
+          nodeAdded:   function(node){stage.addChild(node);},
+          nodeRemoved: function(node){stage.removeChild(node); stage.clear();}
+        });
+
+        champion = new nudge2d.Champion();
+        nudge2d.Scene.addNode(champion);
 
         createjs.Ticker.addEventListener('tick', tickStage);
         createjs.Ticker.setFPS(30);
@@ -69,35 +75,32 @@
       }
 
       function tickStage(event){
-        // calculate all projectiles collisions first
-        projectiles.forEach(function(projectile){
-          projectile.x += projectile.velocity;
-          createjs.Tween.get(projectile.sprite).to({y: projectile.y});
-        });
-
-        if(champion.currentAnimation != activeKey){
-          champion.gotoAndPlay(activeKey);
+        var sprites = nudge2d.Scene.nodes;
+        for(var i = 0; i < sprites.length; i++){
+          if(sprites[i]["tick"])
+            sprites[i].tick(stage);
         }
-        // update the view.
+
+        // Update the view.
         stage.update(event);
       }
 
       function stageKeyDown(event){
         event.stopPropagation();
         switch(event.keyCode) {
-          case keyBindings.MOVE_RIGHT: activeKey = 'run'; break;
-          case keyBindings.MOVE_DOWN:  activeKey = 'crouch'; break;
-          case keyBindings.SHOOT:      activeKey = 'shoot'; break;
+          case keyBindings.MOVE_RIGHT: {champion.setAnimation("run");} break;
+          case keyBindings.MOVE_DOWN:  {champion.setAnimation("crouch");} break;
+          case keyBindings.SHOOT:      {champion.firePrimary();} break;
         }
       }
 
       function stageKeyUp(event){
         // release the current animation
-        activeKey = 'idle';
+        champion.setAnimation("idle");
       }
 
-      function scaleCanvas() {
-        // the following borrowed from: http://bit.ly/11b5Pij
+      function scaleCanvas(event) {
+        // The following borrowed from: http://bit.ly/11b5Pij
         var w = window.innerWidth;
         var h = window.innerHeight;
 
@@ -121,7 +124,8 @@
         }
 
         // update the stage
-        stage.update()
+        stage.setBounds(stageW, stageH);
+        stage.update(event);
       }
     </script>
   </head>
