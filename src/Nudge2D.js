@@ -131,14 +131,19 @@ this.nudge2d = this.nudge2d || {};  // Initialize namespace
   function initScene(options){
     return {
       nodes: new Array(),
+      collidables: new Array(),
       nodeAdded:   options.nodeAdded   || function(){},
       nodeRemoved: options.nodeRemoved || function(){},
       // Methods:
       addNode: function(node){
+        if(node["health"])
+          this.collidables.push(node);
         this.nodes.push(node);
         this.nodeAdded(node);
       },
       removeNode: function(node){
+        if(node["health"])
+          this.collidables.pop(node);
         this.nodes.pop(node);
         this.nodeRemoved(node);
       }

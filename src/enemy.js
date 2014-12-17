@@ -17,7 +17,6 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
     this.activeState = "idle";
 
     this.Sprite_initialize(spritesheet, this.activeState);
-    this.direction = -1;
     this.health = 100;
   };
 
@@ -30,6 +29,13 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
     var callback = onComplete || function(){};
     this.activeState = animation;
     this.on("animationend", callback);
+  };
+
+  Enemy.prototype.notifyHit = function(target){
+    if(target instanceof Projectile){
+      this.health -= target.damage;
+      nudge2d.Scene.removeNode(target);
+    }
   };
 
   /**

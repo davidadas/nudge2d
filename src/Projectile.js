@@ -5,21 +5,23 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
    * @param sprite the projectile animation
    * @param vX velocity along the x-axis
    * @param vY velocity along the y-axis
+   * @param damage
    * @constructor
    */
-  function Projectile(sprite, vX, vY) {
-    this.initialize(sprite, vX, vY);
+  function Projectile(sprite, vX, vY, damage) {
+    this.initialize(sprite, vX, vY, damage);
   }
   Projectile.prototype = new createjs.Sprite();
   Projectile.prototype.Sprite_initialize = Projectile.prototype.initialize;
 
-  Projectile.prototype.initialize = function(sprite, vX, vY){
+  Projectile.prototype.initialize = function(sprite, vX, vY, damage){
     var animation = nudge2d.AssetManifest.projectile;
     var spritesheet = new createjs.SpriteSheet(animation);
 
     this.Sprite_initialize(spritesheet, sprite);
     this.vX = vX;
     this.vY = vY;
+    this.damage = damage || 1;
   };
 
   /**
@@ -31,8 +33,17 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
     this.x += this.vX;
     this.y += this.vY;
 
+    var units = nudge2d.Scene.collidables;
+    for(var i = 0; i < units.length; i++){
+      var hasCollision = ndgmr.checkRectCollision(this, sprites[i]);
+      if(!!hasCollision){
+        units[i].health -= this.damage;
+        nudge2d.Scene.removeNode(this);
+      }
+    }
+
     // If outside the game boundary, remove.
-    if(this.x > stage.getBounds().x)
+    if(this.x > stage.getBounds().x || this.x < 0)
       nudge2d.Scene.removeNode(this);
   };
 
