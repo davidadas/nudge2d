@@ -63,7 +63,7 @@
         nudge2d.initialize({
           manifest:    loader,
           nodeAdded:   function(node){stage.addChild(node);},
-          nodeRemoved: function(node){stage.removeChild(node); stage.clear();}
+          nodeRemoved: function(node){stage.removeChild(node);}
         });
 
         champion = new nudge2d.Champion();

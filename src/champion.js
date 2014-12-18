@@ -17,8 +17,15 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
 
     this.Sprite_initialize(spritesheet, "idle");
 
-    // Default properties.
-    this.primWeapon = "blue_bullet";
+    // Default Champion properties
+    this.primWeapon = {
+      type: "blue_bullet",
+      velocityX: 30,
+      velocityY: 0,
+      x: this.x+30,
+      y: this.y+30,
+      damage: 5
+    }
   };
 
   /**
@@ -34,9 +41,7 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
   // Fires unit's primary weapon.
   Champion.prototype.firePrimary = function(){
     this.setAnimation("shoot");
-    var bullet = new nudge2d.Projectile(this.primWeapon, 30, 0, 5);
-    bullet.x = this.x+30;
-    bullet.y = this.y+35;
+    var bullet = new nudge2d.Projectile(this.primWeapon);
     // Add the bullet to the scene.
     nudge2d.Scene.addNode(bullet);
   };

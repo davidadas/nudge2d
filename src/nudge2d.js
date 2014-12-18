@@ -15,7 +15,8 @@ this.nudge2d = this.nudge2d || {};  // Initialize namespace
   }
 
   /**
-   * @TODO: Replace with runtime loading / lazy initialization.
+   * @TODO: Replace with AJAX request.
+   * @TODO: Or, runtime loading / lazy initialization.
    */
   function loadAssets(loader){
     return {
@@ -136,13 +137,13 @@ this.nudge2d = this.nudge2d || {};  // Initialize namespace
       nodeRemoved: options.nodeRemoved || function(){},
       // Methods:
       addNode: function(node){
-        if(node["health"])
+        if(node["health"]) // TODO: Implement more elegant solution.
           this.collidables.push(node);
         this.nodes.push(node);
         this.nodeAdded(node);
       },
       removeNode: function(node){
-        if(node["health"])
+        if(node["health"]) // TODO: Implement more elegant solution.
           this.collidables.pop(node);
         this.nodes.pop(node);
         this.nodeRemoved(node);

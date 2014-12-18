@@ -2,26 +2,27 @@ this.nudge2d = this.nudge2d || {}; // Initialize namespace
 
 (function (window) {
   /**
-   * @param sprite the projectile animation
-   * @param vX velocity along the x-axis
-   * @param vY velocity along the y-axis
-   * @param damage
+   * @param options
    * @constructor
    */
-  function Projectile(sprite, vX, vY, damage) {
-    this.initialize(sprite, vX, vY, damage);
+  function Projectile( options ) {
+    this.initialize(options);
   }
   Projectile.prototype = new createjs.Sprite();
   Projectile.prototype.Sprite_initialize = Projectile.prototype.initialize;
 
-  Projectile.prototype.initialize = function(sprite, vX, vY, damage){
+  Projectile.prototype.initialize = function( options ){
     var animation = nudge2d.AssetManifest.projectile;
     var spritesheet = new createjs.SpriteSheet(animation);
 
-    this.Sprite_initialize(spritesheet, sprite);
-    this.vX = vX;
-    this.vY = vY;
-    this.damage = damage || 1;
+    // Default Projectile properties
+    this.vX = options.velocityX || 0;
+    this.vY = options.velocityY || 0;
+    this.x  = options.x || 0;
+    this.y  = options.y || 0;
+    this.damage = options.damage || 0;
+
+    this.Sprite_initialize(spritesheet, options.type);
   };
 
   /**
